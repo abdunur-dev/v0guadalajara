@@ -1,32 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
 import {Button} from '@/components/ui/button'
-import Image from 'next/image'
 import {HeroHeader} from './header'
 import {InfiniteSlider} from '@/components/ui/infinite-slider'
 import {ProgressiveBlur} from '@/components/ui/progressive-blur'
 import {TextEffect} from "@/components/motion-primitives/text-effect";
 import {AnimatedGroup} from "@/components/motion-primitives/animated-group";
-
-const transitionVariants = {
-    item: {
-        hidden: {
-            opacity: 0,
-            filter: 'blur(12px)',
-            y: 12,
-        },
-        visible: {
-            opacity: 1,
-            filter: 'blur(0px)',
-            y: 0,
-            transition: {
-                type: 'spring',
-                bounce: 0.3,
-                duration: 1.5,
-            },
-        },
-    },
-}
+import V0Icon from "@/components/icons/v0-icon";
+import VercelWordmarkIcon from "@/components/icons/vercel-wordmark-icon";
+import GlobantLogoIcon from "@/components/icons/globant-logo-icon";
+import DecryptedText from "@/components/DecryptedText";
+import {transitionVariants} from "@/lib/utils";
 
 export default function HeroSection() {
     return (
@@ -36,13 +20,31 @@ export default function HeroSection() {
                 <section>
                     <div className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-44">
                         <div className="relative mx-auto flex max-w-6xl flex-col px-6 lg:block">
-                            <div className="mx-auto max-w-lg text-center lg:ml-0 lg:w-1/2 lg:text-left">
+                            <div className="mx-auto max-w-2xl text-center lg:ml-0 lg:text-left">
+                                <div className='mt-8 lg:mt-16'>
+                                    <DecryptedText
+                                        text="Thursday February 5th, 2026 - New York City"
+                                        animateOn="view"
+                                        revealDirection="start"
+                                        sequential
+                                        useOriginalCharsOnly={false}
+                                        speed={70}
+                                        className='font-mono text-muted-foreground bg-black rounded-md uppercase'
+                                    />
+                                </div>
                                 <TextEffect
                                     preset="fade-in-blur"
                                     speedSegment={0.3}
                                     as="h1"
-                                    className="mt-8 max-w-2xl text-balance text-5xl font-medium md:text-6xl lg:mt-16 xl:text-7xl">
-                                    Ship 10x Faster with NS
+                                    className="max-w-2xl text-balance text-6xl font-medium md:text-7xl xl:text-8xl">
+                                    Prompt
+                                </TextEffect>
+                                <TextEffect
+                                    preset="fade-in-blur"
+                                    speedSegment={0.3}
+                                    as="h1"
+                                    className="max-w-2xl text-balance text-6xl font-medium md:text-7xl xl:text-8xl">
+                                    to Production
                                 </TextEffect>
                                 <TextEffect
                                     per="line"
@@ -50,9 +52,9 @@ export default function HeroSection() {
                                     speedSegment={0.3}
                                     delay={0.5}
                                     as="p"
-                                    className="mt-8 max-w-2xl text-pretty text-lg">
-                                    Highly customizable components for building modern websites and applications that
-                                    look and feel the way you mean it.
+                                    className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground bg-black p-1 rounded-md">
+                                    v0 is getting ready to launch its biggest product update yet. We're celebrating with
+                                    v0 IRLs around the world.
                                 </TextEffect>
                                 <AnimatedGroup
                                     variants={{
@@ -73,7 +75,7 @@ export default function HeroSection() {
                                         size="lg"
                                         className="px-5 text-base">
                                         <Link href="#link">
-                                            <span className="text-nowrap">Start Building</span>
+                                            <span className="text-nowrap">Register Now</span>
                                         </Link>
                                     </Button>
                                     <Button
@@ -83,7 +85,7 @@ export default function HeroSection() {
                                         variant="ghost"
                                         className="px-5 text-base">
                                         <Link href="#link">
-                                            <span className="text-nowrap">Request a demo</span>
+                                            <span className="text-nowrap">Contact Host</span>
                                         </Link>
                                     </Button>
                                 </AnimatedGroup>
@@ -109,85 +111,23 @@ export default function HeroSection() {
 
                         <div className="flex flex-col items-center md:flex-row">
                             <div className="md:max-w-44 md:border-r md:pr-6">
-                                <p className="text-end text-sm">In collaboration with</p>
+                                <p className="text-end text-sm font-mono uppercase">Supported by</p>
                             </div>
                             <div className="relative py-6 md:w-[calc(100%-11rem)]">
                                 <InfiniteSlider
                                     speedOnHover={20}
                                     speed={40}
                                     gap={112}>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-5 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                                            alt="Nvidia Logo"
-                                            height="20"
-                                            width="auto"
-                                        />
+                                    <div className="flex items-center">
+                                        <V0Icon size={35} aria-label="v0 Logo" className='text-foreground mx-auto'/>
                                     </div>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-4 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/column.svg"
-                                            alt="Column Logo"
-                                            height="16"
-                                            width="auto"
-                                        />
+                                    <div className="flex items-center">
+                                        <VercelWordmarkIcon size={20} aria-label="Vercel Logo"
+                                                            className='text-foreground mx-auto'/>
                                     </div>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-4 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/github.svg"
-                                            alt="GitHub Logo"
-                                            height="16"
-                                            width="auto"
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-5 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/nike.svg"
-                                            alt="Nike Logo"
-                                            height="20"
-                                            width="auto"
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-5 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
-                                            alt="Lemon Squeezy Logo"
-                                            height="20"
-                                            width="auto"
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-4 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/laravel.svg"
-                                            alt="Laravel Logo"
-                                            height="16"
-                                            width="auto"
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-7 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/lilly.svg"
-                                            alt="Lilly Logo"
-                                            height="28"
-                                            width="auto"
-                                        />
-                                    </div>
-
-                                    <div className="flex">
-                                        <img
-                                            className="mx-auto h-6 w-fit dark:invert"
-                                            src="https://html.tailus.io/blocks/customers/openai.svg"
-                                            alt="OpenAI Logo"
-                                            height="24"
-                                            width="auto"
-                                        />
+                                    <div className="flex items-center">
+                                        <GlobantLogoIcon size={20} aria-label="Globant Logo"
+                                                         className='text-foreground mx-auto'/>
                                     </div>
                                 </InfiniteSlider>
                                 <div
