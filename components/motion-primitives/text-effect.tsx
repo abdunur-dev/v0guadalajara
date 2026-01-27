@@ -36,6 +36,12 @@ export type TextEffectProps = {
     containerTransition?: Transition;
     segmentTransition?: Transition;
     style?: React.CSSProperties;
+    triggerOnView?: boolean;
+    viewportOptions?: {
+        once?: boolean;
+        amount?: number | 'some' | 'all';
+        margin?: string;
+    };
 };
 
 const defaultStaggerTimes: Record<PerType, number> = {
@@ -223,6 +229,8 @@ export function TextEffect({
                                containerTransition,
                                segmentTransition,
                                style,
+                               triggerOnView = false,
+                               viewportOptions = { once: true, amount: 0.3 },
                            }: TextEffectProps) {
     const segments = splitText(children, per);
     const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
@@ -264,13 +272,24 @@ export function TextEffect({
         }),
     };
 
+    const animationProps = triggerOnView
+        ? {
+            initial: 'hidden',
+            whileInView: 'visible',
+            exit: 'exit',
+            viewport: viewportOptions,
+        }
+        : {
+            initial: 'hidden',
+            animate: 'visible',
+            exit: 'exit',
+        };
+
     return (
         <AnimatePresence mode='popLayout'>
             {trigger && (
                 <MotionTag
-                    initial='hidden'
-                    animate='visible'
-                    exit='exit'
+                    {...animationProps}
                     variants={computedVariants.container}
                     className={className}
                     onAnimationComplete={onAnimationComplete}
