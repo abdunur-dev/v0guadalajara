@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import Lanyard from "@/components/ui/lanyard";
 import { Button } from "@/components/ui/button";
 import CardTemplate, { type CardTemplateRef } from "@/components/card-template";
+import { Download } from "lucide-react";
 
 const MAX_CHARACTERS = 20;
 
@@ -23,6 +24,7 @@ export default function LanyardWithControls({
   const [cardTextureUrl, setCardTextureUrl] = useState<string | undefined>(undefined);
   const [textureKey, setTextureKey] = useState(0);
   const cardTemplateRef = useRef<CardTemplateRef>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const characterCount = inputValue.length;
   const isAtLimit = characterCount >= MAX_CHARACTERS;
@@ -33,6 +35,17 @@ export default function LanyardWithControls({
     setCardTextureUrl(dataUrl);
     setTextureKey((prev) => prev + 1);
   }, []);
+
+  const handleExport = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const dataUrl = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = `lanyard-${appliedName || "card"}.png`;
+    link.href = dataUrl;
+    link.click();
+  };
 
   const handleApplyName = async () => {
     setAppliedName(inputValue);
@@ -66,6 +79,7 @@ export default function LanyardWithControls({
         position={position}
         containerClassName={containerClassName}
         cardTextureUrl={cardTextureUrl}
+        canvasRef={canvasRef}
       />
       <div className="px-6 pb-8 lg:absolute lg:bottom-8 lg:right-6 lg:w-auto lg:px-0">
         <div className="mx-auto max-w-md lg:mx-0 lg:ml-auto">
@@ -106,6 +120,15 @@ export default function LanyardWithControls({
               className="shrink-0"
             >
               Apply
+            </Button>
+            <Button
+              onClick={handleExport}
+              variant="outline"
+              size="icon"
+              className="shrink-0"
+              title="Export as PNG"
+            >
+              <Download className="h-4 w-4" />
             </Button>
           </div>
           {isAtLimit && (

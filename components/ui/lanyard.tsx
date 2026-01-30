@@ -30,6 +30,7 @@ interface LanyardProps {
     transparent?: boolean;
     containerClassName?: string;
     cardTextureUrl?: string;
+    canvasRef?: React.RefObject<HTMLCanvasElement | null>;
 }
 
 export default function Lanyard({
@@ -38,7 +39,8 @@ export default function Lanyard({
                                     fov = 20,
                                     transparent = true,
                                     containerClassName,
-                                    cardTextureUrl
+                                    cardTextureUrl,
+                                    canvasRef
                                 }: LanyardProps) {
     const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -52,9 +54,10 @@ export default function Lanyard({
         <div
             className={clsx(containerClassName || "relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center")}>
             <Canvas
+                ref={canvasRef}
                 camera={{position, fov}}
                 dpr={[1, isMobile ? 1.5 : 2]}
-                gl={{alpha: transparent}}
+                gl={{alpha: transparent, preserveDrawingBuffer: true}}
                 onCreated={({gl}) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
             >
                 <ambientLight intensity={Math.PI}/>
