@@ -37,16 +37,25 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
     return (
       <div
         ref={templateRef}
-        className="absolute -left-[9999px] -top-[9999px] pointer-events-none"
         style={{
+          position: "absolute",
+          left: "-9999px",
+          top: "-9999px",
+          pointerEvents: "none",
           width: "512px",
           height: "512px",
         }}
       >
         {/* Card design - black square with centered icon and name at bottom */}
         <div
-          className="w-full h-full flex flex-col items-center justify-between p-8"
           style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "32px",
             backgroundColor: "#000000",
             fontFamily: '"Geist Mono", monospace',
           }}
@@ -55,21 +64,34 @@ const CardTemplate = forwardRef<CardTemplateRef, CardTemplateProps>(
           <div />
 
           {/* Center - V0 Icon */}
-          <div className="flex-1 flex items-center justify-center">
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icon.svg"
               alt="V0 Icon"
-              className="w-32 h-32"
+              style={{ width: "128px", height: "128px" }}
               crossOrigin="anonymous"
             />
           </div>
 
           {/* Bottom - User Name */}
-          <div className="w-full text-center">
+          <div style={{ width: "100%", textAlign: "center" }}>
             <span
-              className="text-white text-2xl font-bold tracking-wider uppercase"
-              style={{ fontFamily: '"Geist Mono", monospace' }}
+              style={{
+                color: "#ffffff",
+                fontSize: "24px",
+                fontWeight: "bold",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                fontFamily: '"Geist Mono", monospace',
+              }}
             >
               {userName || "YOUR NAME"}
             </span>
