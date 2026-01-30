@@ -56,49 +56,58 @@ export default function LanyardWithControls({
     if (!canvas) return;
 
     // Crop settings - adjust these to change the export area
-    const cropScale = 0.5; // Crop to 50% of the canvas (centered)
+    const cropScale = 0.6; // Crop to 60% of the canvas (centered) - closer view
     const cropWidth = canvas.width * cropScale;
     const cropHeight = canvas.height * cropScale;
     const cropX = (canvas.width - cropWidth) / 2;
     const cropY = (canvas.height - cropHeight) / 2;
 
+    // Output resolution multiplier for higher quality export
+    const outputScale = 2; // 2x resolution for sharper image
+    const outputWidth = cropWidth * outputScale;
+    const outputHeight = cropHeight * outputScale;
+
     // Create a new canvas for the final image
     const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = cropWidth;
-    exportCanvas.height = cropHeight;
+    exportCanvas.width = outputWidth;
+    exportCanvas.height = outputHeight;
     const ctx = exportCanvas.getContext("2d");
     
     if (!ctx) return;
 
+    // Enable high-quality image scaling
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
     // Draw background image first (cover the entire canvas)
     if (exportBgImage) {
       const bgAspect = exportBgImage.width / exportBgImage.height;
-      const canvasAspect = cropWidth / cropHeight;
+      const canvasAspect = outputWidth / outputHeight;
       
       let drawWidth, drawHeight, drawX, drawY;
       
       if (bgAspect > canvasAspect) {
         // Background is wider - fit height, crop width
-        drawHeight = cropHeight;
-        drawWidth = cropHeight * bgAspect;
-        drawX = (cropWidth - drawWidth) / 2;
+        drawHeight = outputHeight;
+        drawWidth = outputHeight * bgAspect;
+        drawX = (outputWidth - drawWidth) / 2;
         drawY = 0;
       } else {
         // Background is taller - fit width, crop height
-        drawWidth = cropWidth;
-        drawHeight = cropWidth / bgAspect;
+        drawWidth = outputWidth;
+        drawHeight = outputWidth / bgAspect;
         drawX = 0;
-        drawY = (cropHeight - drawHeight) / 2;
+        drawY = (outputHeight - drawHeight) / 2;
       }
       
       ctx.drawImage(exportBgImage, drawX, drawY, drawWidth, drawHeight);
     }
 
-    // Draw the cropped lanyard on top
+    // Draw the cropped lanyard on top (scaled up)
     ctx.drawImage(
       canvas,
       cropX, cropY, cropWidth, cropHeight, // Source rectangle
-      0, 0, cropWidth, cropHeight // Destination rectangle
+      0, 0, outputWidth, outputHeight // Destination rectangle (scaled up)
     );
 
     const dataUrl = exportCanvas.toDataURL("image/png");
