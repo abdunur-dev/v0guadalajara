@@ -61,8 +61,21 @@ export default function LanyardWithControls({
   const [cardTextureUrl, setCardTextureUrl] = useState<string | undefined>(undefined);
   const [textureKey, setTextureKey] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [isReady, setIsReady] = useState(!defaultName); // Ready immediately if no defaultName
   const cardTemplateRef = useRef<CardTemplateRef>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  // Auto-capture texture when component mounts with a defaultName from URL
+  useEffect(() => {
+    if (defaultName && cardTemplateRef.current) {
+      // Small delay to ensure the card template is fully rendered
+      const timer = setTimeout(async () => {
+        await cardTemplateRef.current?.captureTexture();
+        setIsReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [defaultName]);
 
   // Generate shareable URL with encrypted username
   const getShareableUrl = useCallback(() => {
@@ -137,6 +150,25 @@ export default function LanyardWithControls({
       handleApplyName();
     }
   };
+
+  // Show loading spinner while waiting for texture to be ready
+  if (!isReady) {
+    return (
+      <div className="flex flex-col">
+        <CardTemplate
+          ref={cardTemplateRef}
+          userName={inputValue}
+          variant={cardVariant}
+          onTextureReady={handleTextureReady}
+        />
+        <div className={containerClassName}>
+          <div className="flex h-full items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">
