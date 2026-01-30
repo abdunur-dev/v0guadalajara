@@ -10,12 +10,12 @@ import VercelWordmarkIcon from "@/components/icons/vercel-wordmark-icon";
 import GlobantLogoIcon from "@/components/icons/globant-logo-icon";
 import DecryptedText from "@/components/DecryptedText";
 import {transitionVariants} from "@/lib/utils";
-import Lanyard from "@/components/ui/lanyard";
+import LanyardWithControls from "@/components/lanyard-with-controls";
 
 export default function HeroSection() {
     return (
         <main className="overflow-x-hidden">
-            <section>
+            <section className='lg:h-screen'>
                 <div
                     className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-44 lg:grid lg:grid-cols-2 lg:grid-rows-1 grid-cols-1 grid-rows-2">
                     <div className="relative mx-auto flex max-w-xl flex-col px-6 lg:block">
@@ -90,8 +90,10 @@ export default function HeroSection() {
                             </AnimatedGroup>
                         </div>
                     </div>
-                    <Lanyard position={[0, 0, 20]}
-                             containerClassName='lg:absolute lg:top-0 lg:right-0 lg:w-1/2 relative w-full h-screen'/>
+                    <LanyardWithControls 
+                             position={[0, 0, 20]}
+                             containerClassName='lg:absolute lg:top-0 lg:right-0 lg:w-1/2 relative w-full h-screen bg-radial lg:from-transparent lg:to-transparent from-muted to-background select-none'
+                             defaultName=""/>
                 </div>
             </section>
             <section className="bg-background pb-16 md:pb-32">

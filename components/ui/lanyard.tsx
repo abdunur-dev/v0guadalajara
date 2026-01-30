@@ -29,6 +29,8 @@ interface LanyardProps {
     fov?: number;
     transparent?: boolean;
     containerClassName?: string;
+    cardTextureUrl?: string;
+    canvasRef?: React.RefObject<HTMLCanvasElement | null>;
 }
 
 export default function Lanyard({
@@ -36,7 +38,9 @@ export default function Lanyard({
                                     gravity = [0, -40, 0],
                                     fov = 20,
                                     transparent = true,
-                                    containerClassName
+                                    containerClassName,
+                                    cardTextureUrl,
+                                    canvasRef
                                 }: LanyardProps) {
     const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -50,14 +54,15 @@ export default function Lanyard({
         <div
             className={clsx(containerClassName || "relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center")}>
             <Canvas
+                ref={canvasRef}
                 camera={{position, fov}}
                 dpr={[1, isMobile ? 1.5 : 2]}
-                gl={{alpha: transparent}}
+                gl={{alpha: transparent, preserveDrawingBuffer: true}}
                 onCreated={({gl}) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
             >
                 <ambientLight intensity={Math.PI}/>
                 <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-                    <Band isMobile={isMobile}/>
+                    <Band isMobile={isMobile} cardTextureUrl={cardTextureUrl}/>
                 </Physics>
                 <Environment blur={0.75}>
                     <Lightformer
@@ -98,9 +103,10 @@ interface BandProps {
     maxSpeed?: number;
     minSpeed?: number;
     isMobile?: boolean;
+    cardTextureUrl?: string;
 }
 
-function Band({maxSpeed = 50, minSpeed = 0, isMobile = false}: BandProps) {
+function Band({maxSpeed = 50, minSpeed = 0, isMobile = false, cardTextureUrl}: BandProps) {
     // Using "any" for refs since the exact types depend on Rapier's internals
     const band = useRef<any>(null);
     const fixed = useRef<any>(null);
@@ -124,6 +130,29 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false}: BandProps) {
 
     const {nodes, materials} = useGLTF(cardGLB) as any;
     const texture = useTexture(typeof lanyard === 'string' ? lanyard : lanyard.src) as THREE.Texture;
+    
+    // Load custom card texture if provided - use state to handle async loading
+    const [customCardTexture, setCustomCardTexture] = useState<THREE.Texture | null>(null);
+    
+    useEffect(() => {
+        if (!cardTextureUrl) {
+            setCustomCardTexture(null);
+            return;
+        }
+        
+        const loader = new THREE.TextureLoader();
+        loader.load(cardTextureUrl, (loadedTexture) => {
+            loadedTexture.flipY = false;
+            loadedTexture.colorSpace = THREE.SRGBColorSpace;
+            setCustomCardTexture(loadedTexture);
+        });
+        
+        return () => {
+            if (customCardTexture) {
+                customCardTexture.dispose();
+            }
+        };
+    }, [cardTextureUrl]);
     const [curve] = useState(
         () =>
             new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()])
@@ -219,7 +248,7 @@ function Band({maxSpeed = 50, minSpeed = 0, isMobile = false}: BandProps) {
                     >
                         <mesh geometry={nodes.card.geometry}>
                             <meshPhysicalMaterial
-                                map={materials.base.map}
+                                map={cardTextureUrl && customCardTexture ? customCardTexture : materials.base.map}
                                 map-anisotropy={16}
                                 clearcoat={isMobile ? 0 : 1}
                                 clearcoatRoughness={0.15}
