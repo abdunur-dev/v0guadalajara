@@ -15,7 +15,7 @@ import LanyardWithControls from "@/components/lanyard-with-controls";
 export default function HeroSection() {
     return (
         <main className="overflow-x-hidden">
-            <section className='h-screen'>
+            <section className='lg:h-screen'>
                 <div
                     className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-44 lg:grid lg:grid-cols-2 lg:grid-rows-1 grid-cols-1 grid-rows-2">
                     <div className="relative mx-auto flex max-w-xl flex-col px-6 lg:block">

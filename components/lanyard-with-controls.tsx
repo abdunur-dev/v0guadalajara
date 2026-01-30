@@ -191,7 +191,7 @@ export default function LanyardWithControls({
             >
               Apply
             </Button>
-            <TooltipProvider>
+            <TooltipProvider delayDuration={200}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
