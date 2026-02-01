@@ -134,6 +134,17 @@ Update the downloaded file name (around line 159):
 link.download = `v0-guadalajara-${userName || "card"}.png`;  // <-- Change "guadalajara" to your city
 ```
 
+#### OG Images for Social Media (`app/api/og/route.tsx`)
+
+When someone shares a personalized lanyard, dynamic Open Graph images are generated. Update the event details (around lines 6-7):
+
+```tsx
+const EVENT_CITY = "GUADALAJARA";  // <-- Change to your city (uppercase)
+const EVENT_DATE = "FEBRUARY 2026";  // <-- Change to your event date
+```
+
+These values appear on the OG images when sharing lanyard URLs on Twitter, Facebook, LinkedIn, Discord, etc.
+
 ### 3. Sponsors and Partners
 
 #### Logo Carousel (`components/hero-section.tsx`)
