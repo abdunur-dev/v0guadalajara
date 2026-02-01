@@ -136,7 +136,7 @@ link.download = `v0-guadalajara-${userName || "card"}.png`;  // <-- Change "guad
 
 #### OG Images for Social Media (`app/api/og/route.tsx`)
 
-When someone shares a personalized lanyard, dynamic Open Graph images are generated. Update the event details (around lines 6-7):
+When someone shares a personalized lanyard, dynamic Open Graph images are generated. Update the event details (around lines 57-58):
 
 ```tsx
 const EVENT_CITY = "GUADALAJARA";  // <-- Change to your city (uppercase)
